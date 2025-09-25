@@ -1,9 +1,8 @@
 import pandas as pd
 import utils
 
-# -----------------------------------
+
 # Columnas del DataFrame
-# -----------------------------------
 columns = [
     "icao24", "callsign", "origin_country", "time_position", "last_contact",
     "longitude", "latitude", "baro_altitude", "on_ground", "velocity",
@@ -11,12 +10,11 @@ columns = [
     "spi", "position_source"
 ]
 
-# -----------------------------------
-# Lógica principal
-# -----------------------------------
-
+# Se obtiene el token
 token, token_expiry = utils.get_access_token()
 
+# Se comprueba si el token es válido, si lo es obtenemos los datos; 
+# si no obtenemos uno nuevo y posteriormente los datos
 try:
     data = utils.get_opensky_data(token)
 except ValueError:
@@ -28,7 +26,7 @@ except ValueError:
 # Crear DataFrame
 df = pd.DataFrame(data.get("states", []), columns=columns)
 
-# Guardar CSV
+# Guardar CSV con los datos
 df.to_csv("data/flights_raw.csv", index=False)
 print("Datos guardados en data/flights_raw.csv")
 print(df.head())
